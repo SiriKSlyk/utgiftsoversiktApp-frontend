@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const ExpenseTable = ({ expenses, updateExpense, handleDelete, last}) => {
+const ExpenseTable = ({ expenses, updateExpense, handleDelete, last, fetchData}) => {
     const [editExpenseId, setEditExpenseId] = useState(null); // Track which expense is being edited
     const [newExpense, setNewExpense] = useState({
         date: '',
@@ -9,6 +9,16 @@ const ExpenseTable = ({ expenses, updateExpense, handleDelete, last}) => {
         sum: '',
         description: ''
     });
+
+    const translations = {
+        Food: "Mat",
+        Transport: "Transport",
+        House: "Bolig",
+        Etc: "Annet",
+        Debt: "Gjeld",
+        Saving: "Sparing",
+        Subscription: "Abonnomenter"
+    };
 
     const [showInputRow, setShowInputRow] = useState(false);
 
@@ -38,11 +48,6 @@ const ExpenseTable = ({ expenses, updateExpense, handleDelete, last}) => {
         setShowInputRow(false); // Skjuler input raden etter innsending
     };
 
-
-    
-
-
-
     // Edit button clicked - set edit mode
     const handleEditClick = (expense) => {
         setEditExpenseId(expense.id); // Set the expense to edit mode
@@ -50,10 +55,10 @@ const ExpenseTable = ({ expenses, updateExpense, handleDelete, last}) => {
     };
 
     // Submit edited expense
-    const handleEditSubmit = async (e, id) => {
+    const handleEditSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`https://localhost:7062/update/`, {
+            const response = await fetch(`https://localhost:7062/expense/update/`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,10 +76,13 @@ const ExpenseTable = ({ expenses, updateExpense, handleDelete, last}) => {
             console.log('Expense updated with ID:', result);
 
             updateExpense(result); // Update the expense in the parent component
-            setEditExpenseId(null); // Exit edit mode after successful update
+            
         } catch (error) {
             console.error('Error:', error);
         }
+        setEditExpenseId(null); // Exit edit mode after successful update
+            fetchData()
+
     };
 
     // Handle cancel edit
@@ -142,13 +150,13 @@ const ExpenseTable = ({ expenses, updateExpense, handleDelete, last}) => {
                                         <option value="" disabled hidden>
                                             Velg kategori
                                         </option>
-                                        <option value="food">Mat</option>
-                                        <option value="transport">Transport</option>
-                                        <option value="house">Bolig</option>
-                                        <option value="etc">Annet</option>
-                                        <option value="debt">Gjeld</option>
-                                        <option value="saving">Sparing</option>
-                                        <option value="subscription">Abonnomenter</option>
+                                        <option value="Food">Mat</option>
+                                        <option value="Transport">Transport</option>
+                                        <option value="House">Bolig</option>
+                                        <option value="Etc">Annet</option>
+                                        <option value="Debt">Gjeld</option>
+                                        <option value="Saving">Sparing</option>
+                                        <option value="Subscription">Abonnomenter</option>
                                     </select>
                                 </td>
                                 <td>
@@ -229,14 +237,14 @@ const ExpenseTable = ({ expenses, updateExpense, handleDelete, last}) => {
                                             />
                                         </td>
                                         <td>
-                                            <button onClick={(e) => handleEditSubmit(e, expense.id)}>Lagre</button>
+                                            <button onClick={(e) => handleEditSubmit(e)}>Lagre</button>
                                             <button onClick={handleCancelEdit}>Avbryt</button>
                                         </td>
                                     </>
                                 ) : (
                                     <>
                                         <td>{expense.date}</td>
-                                        <td>{expense.category}</td>
+                                        <td>{translations[expense.category]}</td>
                                         <td>{expense.sum.toFixed(2)} kr</td>
                                         <td>{expense.shop}</td>
                                         <td>{expense.description}</td>

@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useLocation, Navigate, Outlet } from 'react-router-dom';
 import AddNewExpense from './AddNewExpense';
 import ImprovedTable from './ImprovedTable';
+import BudgetEdit from './EditBudget';
 
 import './OverviewInterface.css';
 
@@ -87,7 +88,6 @@ const OverviewInterface = (
 
     const editExpense = async (endpoint, method, payload) => {
         const token = localStorage.getItem('token');
-        console.log(token)
         console.log(payload)
         try {
             const response = await fetch('https://localhost:7062/'+endpoint, { // Bytt ut med din API URL
@@ -99,13 +99,13 @@ const OverviewInterface = (
                 credentials: 'include',
                 body: payload,
             });
-            console.log(response)
+
 
             if (!response.ok) {
                 throw new Error('Failed to fetch expenses');
             }
 
-            const data = await response.json();
+            const data = await response.text();
             
             console.log(data)
         } catch (err) {
@@ -161,9 +161,9 @@ const OverviewInterface = (
             <div className="navbar">
                 <h1>Oversikt</h1>
                 <div className="profile">
-                    <form onSubmit={(e) => logoutSubmit(e)}>
+                    {/*<form onSubmit={(e) => logoutSubmit(e)}>
                         <button type="submit">Logg ut</button>
-                    </form>
+                    </form>*/}
                     <span>{user.first_name} {user.last_name}</span>
                     <div className="avatar"></div>
                 </div>
@@ -231,7 +231,8 @@ const OverviewInterface = (
             </div>
 
 
-            <ImprovedTable expenses={expenses} editExpense={editExpense} handleDelete={handleDelete} last={editExpense}/>
+            <ImprovedTable expenses={expenses} editExpense={editExpense} handleDelete={handleDelete} last={editExpense} fetchData={fetchExpenses}/>
+            <BudgetEdit budget={budget} handleSubmit={editExpense}/>
         </>
     );
 };
