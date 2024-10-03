@@ -37,12 +37,14 @@ const Login = () => {
                         'Content-Type': 'application/json',
                     },
                     credentials: 'include',
-                    body: { email: user }
+                    body: {  user }
                 }
 
             );
-            console.log(JSON.stringify * (response))
-            const token = response?.token;
+            console.log(JSON.stringify(response))
+            console.log(response.data.token)
+            const token = response.data.token;
+            localStorage.setItem('token', token);
             setAuth({ user, token })
             setUser('');
             navigate(from, { replace: true });
@@ -50,11 +52,11 @@ const Login = () => {
             if (!err.response) {
                 setErrMsg('No server response')
             } else if (err.response?.status === 400) {
-                errMsg('Missing username')
+                setErrMsg('Missing username')
             } else if (err.response?.status === 401) {
-                errMsg('Unautherized')
+                setErrMsg('Unautherized')
             } else {
-                setErrMsg('Login failed')
+                setErrMsg('Login failed:' + err.response?.status)
             }
             errRef.current.focus();
         }
