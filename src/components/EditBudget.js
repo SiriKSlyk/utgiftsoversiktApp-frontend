@@ -56,7 +56,7 @@ useEffect(() => {
     return (
         <div>
             {!isEditing ? (
-                <button onClick={handleEditClick}>Rediger Budsjett</button> // Viser redigeringsknappen
+                <button style={{margin:"10px"}} onClick={handleEditClick}>Rediger Budsjett</button> // Viser redigeringsknappen
             ) : (
                 <form onSubmit={onSubmit}>
                     <div>

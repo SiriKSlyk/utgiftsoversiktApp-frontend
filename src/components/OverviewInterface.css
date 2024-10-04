@@ -123,22 +123,22 @@ body {
   margin-right: 5px;
 }
 
-.controls select, .controls button {
+button {
   margin: 0 5px;
   padding: 5px 10px;
 }
 
 .table {
   width: 100%;
-  padding: 0 20px;
+  padding: 0 1%;
   margin-top: 20px;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
   
-  margin: 10px;
 }
 
 th, td {

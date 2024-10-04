@@ -94,7 +94,7 @@ const ExpenseTable = ({ expenses, updateExpense, handleDelete, last, fetchData})
     return (
         <div>
             <div className="controls">
-                <label>Vis:</label>
+                {/*<label>Vis:</label>
                 <select>
                     <option>Alle</option>
                 </select>
@@ -102,14 +102,14 @@ const ExpenseTable = ({ expenses, updateExpense, handleDelete, last, fetchData})
                 <label>Filtrer etter:</label>
                 <select>
                     <option>Alle</option>
-                    {/*<option>Bolig</option>
+                    <option>Bolig</option>
                     <option>Mat</option>
                     <option>Transport</option>
                     <option>Gjeld</option>
                     <option>Sparing</option>
                     <option>Annet</option>
-                    <option>Abonnomenter</option>*/}
-                </select>
+                    <option>Abonnomenter</option>
+                </select>*/}
 
                 {/*<button>+ Legg til fast utgift</button>
                 <button>+ Legg til</button>*/}
@@ -185,11 +185,10 @@ const ExpenseTable = ({ expenses, updateExpense, handleDelete, last, fetchData})
                                     />
                                 </td>
                                 <button style={{ margin: ' 10px', padding: '2px' }} onClick={handleSubmitNewExpense}>Legg til</button>
-                                
-
                             </tr>
                         )}
-                        {expenses.map((expense, index) => (
+                        {expenses.sort((a, b) => (a.date).localeCompare(b.date))
+                        .map((expense, index) => (
                             <tr key={index}>
                                 {editExpenseId === expense.id ? (
                                     <>
@@ -230,7 +229,7 @@ const ExpenseTable = ({ expenses, updateExpense, handleDelete, last, fetchData})
                                             />
                                         </td>
                                         <td>
-                                            <textarea
+                                            <input
                                                 name="description"
                                                 value={newExpense.description}
                                                 onChange={handleInputChange}

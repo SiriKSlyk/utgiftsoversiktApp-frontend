@@ -60,8 +60,8 @@ const OverviewInterface = (
         <Navigate to="/" />
     }
 
-     // Handle delete
-     const handleDelete = async (expenseId) => {
+    // Handle delete
+    const handleDelete = async (expenseId) => {
         console.log("Expense to be deleted: " + expenseId)
         try {
             const response = await fetch(`https://localhost:7062/expense/delete/`, {
@@ -78,7 +78,7 @@ const OverviewInterface = (
                 throw new Error('Failed to delete expense');
             }
 
-            
+
         } catch (error) {
             console.error('Error:', error);
         }
@@ -90,7 +90,7 @@ const OverviewInterface = (
         const token = localStorage.getItem('token');
         console.log(payload)
         try {
-            const response = await fetch('https://localhost:7062/'+endpoint, { // Bytt ut med din API URL
+            const response = await fetch('https://localhost:7062/' + endpoint, { // Bytt ut med din API URL
                 method: method,
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -106,7 +106,7 @@ const OverviewInterface = (
             }
 
             const data = await response.text();
-            
+
             console.log(data)
         } catch (err) {
             setError(err.message);
@@ -115,13 +115,14 @@ const OverviewInterface = (
         fetchExpenses()
     }
 
-    
+
 
     const fetchExpenses = async () => {
-        const token = localStorage.getItem( 'token' );
+        const token = localStorage.getItem('token');
         console.log("GetAll")
         try {
-            const response = await fetch('https://localhost:7062/auth/getall', { // Bytt ut med din API URL
+            const response = await fetch('https://localhost:7062/auth/getall',
+            {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -136,9 +137,9 @@ const OverviewInterface = (
             }
 
             const data = await response.json();
-            setExpenses(data.expenses); // Setter expenses i state
-            setBudget(data.budget); // Setter expenses i state
-            setMonth(data.month); // Setter expenses i state
+            setExpenses(data.expenses);
+            setBudget(data.budget);
+            setMonth(data.month);
             setUser(data.user)
             console.log(data)
         } catch (err) {
@@ -149,7 +150,7 @@ const OverviewInterface = (
 
 
 
-    
+
 
     useEffect(() => {
         fetchExpenses()
@@ -172,7 +173,7 @@ const OverviewInterface = (
             {/* Top Section */}
             <div className='top'>
                 <div className='header-item'>
-                    <h3 style={{ color: '#000000' }} className='spent'>{month.sum}kr</h3>
+                    <h3 style={{ color: budget.sum > month.sum ? 'green' : budget.sum < month.sum ? 'red' : '#000000' }} className='spent'>{month.sum}kr</h3>
                     <h3>Brukt</h3>
                 </div>
                 <div className='header-item'>
@@ -186,53 +187,58 @@ const OverviewInterface = (
             </div>
 
             {/* Title */}
-            
+
 
             {/* Category Section */}
             <div className='section'>
                 <div className='category-card'>
                     <h3>Bolig</h3>
                     <p style={{ color: budget.house - month.house > 0 ? 'green' : budget.house - month.house < 0 ? 'red' : '#000000', fontWeight: 'bold' }} className="spent">{budget.house - month.house} kr</p>
-                    <p>Budsjett {budget.house} kr</p>
+
                     <p>Brukt {month.house} kr</p>
+                    <p>Budsjett {budget.house} kr</p>
                 </div>
                 <div className='category-card'>
                     <h3>Mat</h3>
                     <p style={{ color: budget.food - month.food > 0 ? 'green' : budget.food - month.food < 0 ? 'red' : '#000000', fontWeight: 'bold' }} className="spent">{budget.food - month.food} kr</p>
-                    <p>Budsjett {budget.food} kr</p>
+
                     <p>Brukt {month.food} kr</p>
+                    <p>Budsjett {budget.food} kr</p>
                 </div>
                 <div className='category-card'>
                     <h3>Transport</h3>
                     <p style={{ color: budget.transport - month.transport > 0 ? 'green' : budget.transport - month.transport < 0 ? 'red' : '#000000', fontWeight: 'bold' }} className="spent">{budget.transport - month.transport} kr</p>
-                    <p>Budsjett {budget.transport} kr</p>
+
                     <p>Brukt {month.transport} kr</p>
+                    <p>Budsjett {budget.transport} kr</p>
                 </div>
                 <div className='category-card'>
                     <h3>Gjeld</h3>
                     <p style={{ color: budget.debt - month.debt > 0 ? 'green' : budget.debt - month.debt < 0 ? 'red' : '#000000', fontWeight: 'bold' }} className="spent">{budget.debt - month.debt} kr</p>
-                    <p >Budsjett {budget.debt} kr</p>
+
                     <p>Brukt {month.debt} kr</p>
+                    <p >Budsjett {budget.debt} kr</p>
                 </div>
                 <div className='category-card'>
                     <h3>Sparing</h3>
                     <p style={{ color: budget.saving - month.saving > 0 ? 'green' : budget.saving - month.saving < 0 ? 'red' : '#000000', fontWeight: 'bold' }} className="spent">{budget.saving - month.saving} kr</p>
-                    <p>Budsjett {budget.saving} kr</p>
+
                     <p>Brukt {month.saving} kr</p>
+                    <p>Budsjett {budget.saving} kr</p>
                 </div>
                 <div className='category-card'>
                     <h3>Annet</h3>
                     <p style={{ color: budget.etc - month.etc > 0 ? 'green' : budget.etc - month.etc < 0 ? 'red' : '#000000', fontWeight: 'bold' }} className="spent">{budget.etc - month.etc} kr</p>
-                    <p>Budsjett {budget.etc} kr</p>
+
                     <p>Brukt {month.etc} kr</p>
+                    <p>Budsjett {budget.etc} kr</p>
                 </div>
 
                 {/* Add more category cards here */}
             </div>
 
-
-            <ImprovedTable expenses={expenses} editExpense={editExpense} handleDelete={handleDelete} last={editExpense} fetchData={fetchExpenses}/>
-            <BudgetEdit budget={budget} handleSubmit={editExpense}/>
+            <ImprovedTable expenses={expenses} editExpense={editExpense} handleDelete={handleDelete} last={editExpense} fetchData={fetchExpenses} />
+            <BudgetEdit budget={budget} handleSubmit={editExpense} />
         </>
     );
 };
